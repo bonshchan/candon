@@ -10,6 +10,8 @@
 
 html {
     scroll-behavior: smooth;
+    scroll-padding-top: 70px;
+    /* Offsets scroll so sticky header doesn't cover section titles */
 }
 
 @keyframes fadeInUp {
@@ -33,6 +35,7 @@ body {
     margin: 0;
     padding: 0;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
 }
 
 /* Navigation */
@@ -43,6 +46,8 @@ nav {
     position: sticky;
     top: 0;
     z-index: 1000;
+    transform: translateZ(0);
+    /* Hardware acceleration for smooth sticky behavior */
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -87,8 +92,9 @@ nav ul li a:hover {
     background-image: linear-gradient(rgba(255, 255, 255, 0.2), var(--bg-color)), url('img/Candon/candon.jpg');
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
-    /* Parallax-like effect */
+    background-attachment: scroll;
+    /* Changed to scroll for fluid 60fps performance */
+    will-change: transform;
     padding: 0;
     margin-bottom: 0;
     border-radius: 0;
@@ -155,6 +161,8 @@ section {
     margin-bottom: 60px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, opacity;
+    /* GPU layer hint for smoother scrolling animations */
     animation: fadeInUp 0.8s ease-out backwards;
 }
 
@@ -176,11 +184,11 @@ section {
 }
 
 .spot-card:hover {
-    transform: translateY(-10px) scale(1.02);
+    transform: translateY(-4px) scale(1.01);
 }
 
 .spot-card:hover .responsive-img {
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .spot-card h3 {
@@ -199,6 +207,7 @@ section {
     aspect-ratio: 16/10;
     object-fit: cover;
     border-radius: 12px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
 }
 
 /* Forms */
@@ -276,12 +285,126 @@ tbody tr:hover {
 }
 
 @media (max-width: 734px) {
+    html {
+        scroll-padding-top: 100px;
+        /* Extra padding for the floating mobile nav */
+    }
+
     .hero h1 {
         font-size: 48px;
     }
 
     section {
         padding: 20px;
+    }
+
+    .hero {
+        padding: 80px 20px;
+        /* Reduced vertical padding for smaller height */
+    }
+
+    nav {
+        margin: 12px 20px;
+        /* Space on all sides */
+        border-radius: 20px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        top: 12px;
+        background: rgba(251, 251, 253, 0.7);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-bottom: none;
+    }
+
+    .nav-container {
+        padding: 0 8px;
+    }
+
+    nav ul {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        padding: 10px 5px;
+    }
+
+    .spot-card {
+        padding: 10px;
+        margin: 8px;
+        /* Spaces on all sides */
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .spot-card:hover {
+        transform: translateY(0) scale(0.96);
+        /* Shrinks slightly for a more contained feel on touch */
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+    }
+
+    .spot-card:hover .responsive-img {
+        transform: scale(0.98);
+        /* Insets the photo slightly to create more "space" inside */
+    }
+
+    nav ul li {
+        text-align: center;
+    }
+
+    nav ul li a {
+        display: block;
+        font-size: 12px;
+        padding: 8px 2px;
+        margin: 0;
+    }
+
+    .modal-content {
+        width: 80%;
+        /* Slightly wider to fit text better while keeping gaps */
+        max-height: 75vh;
+        /* More height to reduce excessive scrolling */
+        padding: 16px;
+        overflow-y: auto;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 24px;
+        text-align: center;
+    }
+
+    .modal-hero-img {
+        height: 120px;
+        width: 90%;
+        margin: 0 auto 15px;
+        display: block;
+        border-radius: 12px;
+        object-fit: cover;
+    }
+
+    .carousel-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+
+    #modal-title {
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+
+    #modal-description {
+        font-size: 15px;
+        line-height: 1.5;
+        padding: 0 4px;
+    }
+
+    .close-button {
+        top: 10px;
+        right: 12px;
+        font-size: 24px;
     }
 }
 
